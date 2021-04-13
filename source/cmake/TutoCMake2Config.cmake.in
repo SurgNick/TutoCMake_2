@@ -1,0 +1,7 @@
+
+@PACKAGE_INIT@
+
+check_required_components("@PROJECT_NAME@")
+
+set(TutoCMake2_INCLUDE_DIRS @PACKAGE_INCLUDE_INSTALL_DIR@)
+set(TutoCMake2_LIBRARIES @LIEN2@)
