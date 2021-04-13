@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include <mylib.hpp>
+#include <TutoCMake2/mylib.hpp>
 
 int main() {
     std::cout << "bonsoir" << std::endl;

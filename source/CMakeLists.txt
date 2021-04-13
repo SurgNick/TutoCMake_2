@@ -16,6 +16,13 @@ project(
 
 include(CMakePackageConfigHelpers)
 
+
+message("CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
+set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/cmake/${PROJECT_NAME}")
+
+
 ################################### Implementation ##############################
 
 
@@ -36,37 +43,12 @@ target_include_directories(
 	$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
 )
 
+################################### Config ##############################
 
 
-################################### Install/Packaging ##############################
-
-message("CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
-
-set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
-set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/cmake/${PROJECT_NAME}")
-
-set(LIEN2 /home/nicolas/document/TutoCMake/TutoCMake_2/install/lib/libTutoCMake2.a)
-# install(
-# 	TARGETS ${PROJECT_NAME}
-# )
-
-# install(
-# 	DIRECTORY src
-# 	DESTINATION ${INCLUDE_INSTALL_DIR}
-# 	FILES_MATCHING PATTERN "*.hpp"
-# )
-
-install(
-	FILES ${TUTO_HEADERS} 
-	DESTINATION ${INCLUDE_INSTALL_DIR}
-	)
-
-install(
-	TARGETS ${PROJECT_NAME}
-	RUNTIME DESTINATION "bin"
-	LIBRARY DESTINATION "lib"
-	ARCHIVE DESTINATION "lib"
-	)
+# set(LIEN2 /home/nicolas/document/TutoCMake/TutoCMake_2/install/lib/libTutoCMake2.a)
+# set(LIEN2 /mnt/d/CodeInfo/Cpparti/TutoCMake/TutoCMake_2/install/lib/libTutoCMake2.a)
+set(TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
 
 # https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html?highlight=configure_package_config_file#command:configure_package_config_file
 
@@ -89,3 +71,37 @@ install(
 	DESTINATION
 		${CONFIG_INSTALL_DIR}
 )
+
+install(
+    EXPORT ${TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME}
+    NAMESPACE "TUTOCMAKE2::"
+    DESTINATION ${CONFIG_INSTALL_DIR}
+)
+
+################################### Install/Packaging ##############################
+
+
+
+# install(
+# 	TARGETS ${PROJECT_NAME}
+# )
+
+# install(
+# 	DIRECTORY src
+# 	DESTINATION ${INCLUDE_INSTALL_DIR}
+# 	FILES_MATCHING PATTERN "*.hpp"
+# )
+
+install(
+	FILES ${TUTO_HEADERS} 
+	DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME}
+	)
+
+install(
+	TARGETS ${PROJECT_NAME}
+	EXPORT ${TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME}
+	RUNTIME DESTINATION "bin"
+	LIBRARY DESTINATION "lib"
+	ARCHIVE DESTINATION "lib"
+	)
+
