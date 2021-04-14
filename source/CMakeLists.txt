@@ -1,107 +1,103 @@
-# https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html
-# https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html
-# https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html#command:write_basic_package_version_file
 
-
+###############################################################################
+################################### PROJECT ###################################
+###############################################################################
 
 cmake_minimum_required(VERSION 3.12)
 
 project(
 	TutoCMake2
-	VERSION 1.0
-	DESCRIPTION
-	"Petite description, on va voir ou elle se met :) ba nul part :'("
+	VERSION 1.1
 	LANGUAGES CXX
 )
 
+###############################################################################
+#################################### SETUP ####################################
+###############################################################################
+
 include(CMakePackageConfigHelpers)
+# https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html
 
+set(TUTO_LIB_NAME TutoCMakeLib)
+set(TUTO_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
+set(TUTO_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME})
+# https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 
-message("CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+set(TUTO_LIB_TARGET_NAME ${TUTO_LIB_NAME}Targets)
 
-set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
-set(CONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/cmake/${PROJECT_NAME}")
+###############################################################################
+############################ IMPLEMENTATION/BUILD #############################
+###############################################################################
 
-
-################################### Implementation ##############################
-
-
-set(TUTO_SOURCES
-	src/mylib.cpp
+set(SOURCES
+	src/mylib/mylib.cpp
 )
 
-set(TUTO_HEADERS
-	src/mylib.hpp
+set(HEADERS
+	src/mylib/mylib.hpp
 )
 
-add_library(${PROJECT_NAME} ${TUTO_SOURCES} ${TUTO_HEADERS})
+add_library(${TUTO_LIB_NAME} ${SOURCES} ${HEADERS})
 
-
-target_include_directories(
-	${PROJECT_NAME} PUBLIC
+# https://cmake.org/cmake/help/latest/command/target_include_directories.html
+target_include_directories(${TUTO_LIB_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-	$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+	$<INSTALL_INTERFACE:${TUTO_INCLUDE_INSTALL_DIR}>
 )
+# https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#output-related-expressions
 
-################################### Config ##############################
+###############################################################################
+################################### CONFIG ####################################
+###############################################################################
 
-
-# set(LIEN2 /home/nicolas/document/TutoCMake/TutoCMake_2/install/lib/libTutoCMake2.a)
-# set(LIEN2 /mnt/d/CodeInfo/Cpparti/TutoCMake/TutoCMake_2/install/lib/libTutoCMake2.a)
-set(TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME "${PROJECT_NAME}Targets")
-
-# https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html?highlight=configure_package_config_file#command:configure_package_config_file
+# message("CMAKE_BINARY_DIR         : ${CMAKE_BINARY_DIR}")
+# message("CMAKE_SOURCE_DIR         : ${CMAKE_SOURCE_DIR}")
+# message("CMAKE_CURRENT_BINARY_DIR : ${CMAKE_CURRENT_BINARY_DIR}")
+# message("CMAKE_CURRENT_SOURCE_DIR : ${CMAKE_CURRENT_SOURCE_DIR}")
 
 configure_package_config_file(
-	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/TutoCMake2Config.cmake.in"
-	"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-	INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
-	PATH_VARS INCLUDE_INSTALL_DIR
+	${CMAKE_CURRENT_SOURCE_DIR}/cmake/TutoCMake2Config.cmake.in
+	${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}Config.cmake
+	INSTALL_DESTINATION ${TUTO_CONFIG_INSTALL_DIR}
+	PATH_VARS TUTO_INCLUDE_INSTALL_DIR
 )
 
+
 write_basic_package_version_file(
-	"${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
+	${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}ConfigVersion.cmake
 	COMPATIBILITY ExactVersion
 )
 
+###############################################################################
+############################## INSTALL/PACKAGING ##############################
+###############################################################################
+
+# https://cmake.org/cmake/help/latest/command/install.html
+install(
+	FILES ${HEADERS}
+	DESTINATION ${TUTO_INCLUDE_INSTALL_DIR}/${TUTO_LIB_NAME}
+)
+
+install(
+	TARGETS ${TUTO_LIB_NAME}
+	EXPORT ${TUTO_LIB_TARGET_NAME}
+)
+
+###############################################################################
+############################### INSTALL/CONFIG ################################
+###############################################################################
+
 install(
 	FILES
-		"${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
-		"${CMAKE_CURRENT_BINARY_DIR}/cmake/${PROJECT_NAME}ConfigVersion.cmake"
+		${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}Config.cmake
+		${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}ConfigVersion.cmake
 	DESTINATION
-		${CONFIG_INSTALL_DIR}
+		${TUTO_CONFIG_INSTALL_DIR}
 )
 
+# https://cmake.org/cmake/help/latest/command/install.html#export
 install(
-    EXPORT ${TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME}
-    NAMESPACE "TUTOCMAKE2::"
-    DESTINATION ${CONFIG_INSTALL_DIR}
+	EXPORT ${TUTO_LIB_TARGET_NAME}
+	DESTINATION ${TUTO_CONFIG_INSTALL_DIR}
+	NAMESPACE "TUTOCMAKE2::"
 )
-
-################################### Install/Packaging ##############################
-
-
-
-# install(
-# 	TARGETS ${PROJECT_NAME}
-# )
-
-# install(
-# 	DIRECTORY src
-# 	DESTINATION ${INCLUDE_INSTALL_DIR}
-# 	FILES_MATCHING PATTERN "*.hpp"
-# )
-
-install(
-	FILES ${TUTO_HEADERS} 
-	DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME}
-	)
-
-install(
-	TARGETS ${PROJECT_NAME}
-	EXPORT ${TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME}
-	RUNTIME DESTINATION "bin"
-	LIBRARY DESTINATION "lib"
-	ARCHIVE DESTINATION "lib"
-	)
-

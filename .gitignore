@@ -12,5 +12,7 @@ _deps
 
 build
 install
+userbuild
 userBuild
+userinstall
 userInstall

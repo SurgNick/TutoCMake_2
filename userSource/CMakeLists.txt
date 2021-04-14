@@ -1,27 +1,41 @@
 
+###############################################################################
+################################### PROJECT ###################################
+###############################################################################
+
 cmake_minimum_required(VERSION 3.12)
 
 project(
-    userTutoLib
-    LANGUAGES C CXX
+    UserProject
+    VERSION 1.0
+    LANGUAGES CXX
 )
 
-# set(CMAKE_PREFIX_PATH /home/nicolas/document/TutoCMake/TutoCMake_2/install)
-set(CMAKE_PREFIX_PATH /mnt/d/CodeInfo/Cpparti/TutoCMake/TutoCMake_2/install)
+###############################################################################
+#################################### SETUP ####################################
+###############################################################################
 
+set(USER_EXE_NAME insane.exe)
+set(CMAKE_PREFIX_PATH ../install)
+# https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#config-file-packages
+# https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html
 
-# message("CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}")
-find_package(TutoCMake2 REQUIRED)
+# https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
+find_package(TutoCMakeLib REQUIRED)
 
-add_executable(userExe main.cpp)
+###############################################################################
+############################ IMPLEMENTATION/BUILD #############################
+###############################################################################
 
-target_link_libraries(userExe TUTOCMAKE2::TutoCMake2)
-# target_include_directories(userExe PRIVATE ${TutoCMake2_INCLUDE_DIRS})
+add_executable(${USER_EXE_NAME} main.cpp)
+
+target_link_libraries(${USER_EXE_NAME} TUTOCMAKE2::TutoCMakeLib)
+
+###############################################################################
+############################## INSTALL/PACKAGING ##############################
+###############################################################################
 
 install(
-    TARGETS userExe
+    TARGETS ${USER_EXE_NAME}
     DESTINATION bin
 )
-
-
-# LD_LIBRARY_PATH=/mnt/d/CodeInfo/Cpparti/TutoCMake/TutoCMake_2/install/lib ../userInstall/bin/userExe

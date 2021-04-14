@@ -1,6 +1,6 @@
-
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/@TUTOCMAKE2_CMAKE_TARGETS_EXPORT_NAME@.cmake")
+# https://cmake.org/cmake/help/latest/command/include.html
+include(${CMAKE_CURRENT_LIST_DIR}/@TUTO_LIB_TARGET_NAME@.cmake)
 
-check_required_components("@PROJECT_NAME@")
+check_required_components("@TUTO_LIB_NAME@")
