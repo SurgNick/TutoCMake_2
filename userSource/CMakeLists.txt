@@ -15,7 +15,7 @@ project(
 #################################### SETUP ####################################
 ###############################################################################
 
-set(USER_EXE_NAME insane.exe)
+set(USER_EXE_NAME insane)
 set(CMAKE_PREFIX_PATH ../install)
 # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#config-file-packages
 # https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html
@@ -29,7 +29,7 @@ find_package(TutoCMakeLib REQUIRED)
 
 add_executable(${USER_EXE_NAME} main.cpp)
 
-target_link_libraries(${USER_EXE_NAME} TUTOCMAKE2::TutoCMakeLib)
+target_link_libraries(${USER_EXE_NAME} PUBLIC TUTOCMAKE2::TutoCMakeLib)
 
 ###############################################################################
 ############################## INSTALL/PACKAGING ##############################

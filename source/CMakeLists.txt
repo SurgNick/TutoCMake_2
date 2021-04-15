@@ -25,6 +25,8 @@ set(TUTO_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME})
 
 set(TUTO_LIB_TARGET_NAME ${TUTO_LIB_NAME}Targets)
 
+option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
 ###############################################################################
