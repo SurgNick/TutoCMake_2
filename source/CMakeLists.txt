@@ -15,8 +15,15 @@ project(
 #################################### SETUP ####################################
 ###############################################################################
 
-include(CMakePackageConfigHelpers)
 # https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html
+include(CMakePackageConfigHelpers)
+
+		# ??????????????????????????????????????????????????????????????????????????
+		# include(InstallRequiredSystemLibraries)
+		# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+		# set(CPACK_PACKAGE_VERSION_MAJOR "${TutoCMake2_VERSION_MAJOR}")
+		# set(CPACK_PACKAGE_VERSION_MINOR "${TutoCMake2_VERSION_MINOR}")
+include(CPack)
 
 set(TUTO_LIB_NAME TutoCMakeLib)
 set(TUTO_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
@@ -26,6 +33,8 @@ set(TUTO_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME})
 set(TUTO_LIB_TARGET_NAME ${TUTO_LIB_NAME}Targets)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
+
+message("CMAKE_DEBUG_POSTFIX : ${CMAKE_DEBUG_POSTFIX}")
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -48,6 +57,10 @@ target_include_directories(${TUTO_LIB_NAME} PUBLIC
 )
 # https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#output-related-expressions
 
+# https://cmake.org/cmake/help/v3.20/guide/tutorial/index.html?highlight=export%20symbol#mixing-static-and-shared-step-9
+# define the symbol stating we are using the declspec(dllexport) when building on windows
+target_compile_definitions(${TUTO_LIB_NAME} PRIVATE "TUTO_EXPORTING_MYLIB")
+
 ###############################################################################
 ################################### CONFIG ####################################
 ###############################################################################
@@ -57,6 +70,7 @@ target_include_directories(${TUTO_LIB_NAME} PUBLIC
 # message("CMAKE_CURRENT_BINARY_DIR : ${CMAKE_CURRENT_BINARY_DIR}")
 # message("CMAKE_CURRENT_SOURCE_DIR : ${CMAKE_CURRENT_SOURCE_DIR}")
 
+# generate the config file that is includes the exports
 configure_package_config_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/cmake/TutoCMake2Config.cmake.in
 	${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}Config.cmake
@@ -64,7 +78,7 @@ configure_package_config_file(
 	PATH_VARS TUTO_INCLUDE_INSTALL_DIR
 )
 
-
+# generate the version file for the config file
 write_basic_package_version_file(
 	${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}ConfigVersion.cmake
 	COMPATIBILITY ExactVersion
@@ -74,12 +88,16 @@ write_basic_package_version_file(
 ############################## INSTALL/PACKAGING ##############################
 ###############################################################################
 
+# Note that the DESTINATION option of the install() command must be a relative path; otherwise installed files are ignored by CPack
+
 # https://cmake.org/cmake/help/latest/command/install.html
+# install the include files
 install(
 	FILES ${HEADERS}
 	DESTINATION ${TUTO_INCLUDE_INSTALL_DIR}/${TUTO_LIB_NAME}
 )
 
+# install the library
 install(
 	TARGETS ${TUTO_LIB_NAME}
 	EXPORT ${TUTO_LIB_TARGET_NAME}
@@ -89,6 +107,7 @@ install(
 ############################### INSTALL/CONFIG ################################
 ###############################################################################
 
+# install the configuration files
 install(
 	FILES
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}Config.cmake
@@ -98,6 +117,7 @@ install(
 )
 
 # https://cmake.org/cmake/help/latest/command/install.html#export
+# install the generated <export-name>.cmake file
 install(
 	EXPORT ${TUTO_LIB_TARGET_NAME}
 	DESTINATION ${TUTO_CONFIG_INSTALL_DIR}
