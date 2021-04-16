@@ -1,6 +1,5 @@
 
-#ifndef MYLIB_HPP
-#define MYLIB_HPP
+#pragma once
 
 #if defined(_WIN32)
 #  if defined(TUTO_EXPORTING_MYLIB)
@@ -13,5 +12,3 @@
 #endif
 
 __declspec(noinline) int insaneMath(int);
-
-#endif
