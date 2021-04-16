@@ -11,4 +11,4 @@
 #  define DECLSPEC
 #endif
 
-__declspec(noinline) int insaneMath(int);
+DECLSPEC int insaneMath(int);

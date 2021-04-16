@@ -15,16 +15,6 @@ project(
 #################################### SETUP ####################################
 ###############################################################################
 
-# https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html
-include(CMakePackageConfigHelpers)
-
-		# ??????????????????????????????????????????????????????????????????????????
-		# include(InstallRequiredSystemLibraries)
-		# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
-		# set(CPACK_PACKAGE_VERSION_MAJOR "${TutoCMake2_VERSION_MAJOR}")
-		# set(CPACK_PACKAGE_VERSION_MINOR "${TutoCMake2_VERSION_MINOR}")
-include(CPack)
-
 set(TUTO_LIB_NAME TutoCMakeLib)
 set(TUTO_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
 set(TUTO_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME})
@@ -34,7 +24,15 @@ set(TUTO_LIB_TARGET_NAME ${TUTO_LIB_NAME}Targets)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 
-message("CMAKE_DEBUG_POSTFIX : ${CMAKE_DEBUG_POSTFIX}")
+
+# https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html
+include(CMakePackageConfigHelpers)
+
+
+# https://cmake.org/cmake/help/v3.20/module/GenerateExportHeader.html
+include(GenerateExportHeader)
+set(TUTO_EXPORT_BASE_NAME include/${TUTO_LIB_NAME})
+set(TUTO_EXPORT_MACRO_NAME TUTO_MYLIB_EXPORT)
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -59,7 +57,7 @@ target_include_directories(${TUTO_LIB_NAME} PUBLIC
 
 # https://cmake.org/cmake/help/v3.20/guide/tutorial/index.html?highlight=export%20symbol#mixing-static-and-shared-step-9
 # define the symbol stating we are using the declspec(dllexport) when building on windows
-target_compile_definitions(${TUTO_LIB_NAME} PRIVATE "TUTO_EXPORTING_MYLIB")
+target_compile_definitions(${TUTO_LIB_NAME} PRIVATE "${TUTO_EXPORT_MACRO_NAME}")
 
 ###############################################################################
 ################################### CONFIG ####################################
@@ -82,6 +80,13 @@ configure_package_config_file(
 write_basic_package_version_file(
 	${CMAKE_CURRENT_BINARY_DIR}/cmake/${TUTO_LIB_NAME}ConfigVersion.cmake
 	COMPATIBILITY ExactVersion
+)
+
+# generate a file (<BASE_NAME>_export.h) suitable for preprocessor inclusion which contains EXPORT macros to be used in library classes
+GENERATE_EXPORT_HEADER(
+	${TUTO_LIB_NAME}
+	BASE_NAME ${TUTO_EXPORT_BASE_NAME}
+    EXPORT_MACRO_NAME ${TUTO_EXPORT_MACRO_NAME}
 )
 
 ###############################################################################
