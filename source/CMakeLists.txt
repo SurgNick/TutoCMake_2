@@ -31,7 +31,11 @@ include(CMakePackageConfigHelpers)
 
 # https://cmake.org/cmake/help/v3.20/module/GenerateExportHeader.html
 include(GenerateExportHeader)
-set(TUTO_EXPORT_BASE_NAME include/${TUTO_LIB_NAME})
+set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
+message(STATUS "Generated files goes in : ${GENERATED_DIR}")
+file(MAKE_DIRECTORY ${GENERATED_DIR})
+
+set(TUTO_EXPORT_FILE_NAME ${TUTO_LIB_NAME}_export.h)
 set(TUTO_EXPORT_MACRO_NAME TUTO_MYLIB_EXPORT)
 
 ###############################################################################
@@ -48,16 +52,27 @@ set(HEADERS
 
 add_library(${TUTO_LIB_NAME} ${SOURCES} ${HEADERS})
 
+
+# generate a file suitable for preprocessor inclusion which contains EXPORT macros to be used in library classes
+generate_export_header(
+	${TUTO_LIB_NAME}
+	EXPORT_FILE_NAME ${GENERATED_DIR}/${TUTO_EXPORT_FILE_NAME}
+	EXPORT_MACRO_NAME ${TUTO_EXPORT_MACRO_NAME}
+)
+
+
 # https://cmake.org/cmake/help/latest/command/target_include_directories.html
 target_include_directories(${TUTO_LIB_NAME} PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+	$<BUILD_INTERFACE:${GENERATED_DIR}>
+
 	$<INSTALL_INTERFACE:${TUTO_INCLUDE_INSTALL_DIR}>
 )
 # https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#output-related-expressions
 
 # https://cmake.org/cmake/help/v3.20/guide/tutorial/index.html?highlight=export%20symbol#mixing-static-and-shared-step-9
 # define the symbol stating we are using the declspec(dllexport) when building on windows
-target_compile_definitions(${TUTO_LIB_NAME} PRIVATE "${TUTO_EXPORT_MACRO_NAME}")
+target_compile_definitions(${TUTO_LIB_NAME} PUBLIC "${TUTO_EXPORT_MACRO_NAME}")
 
 ###############################################################################
 ################################### CONFIG ####################################
@@ -82,12 +97,6 @@ write_basic_package_version_file(
 	COMPATIBILITY ExactVersion
 )
 
-# generate a file (<BASE_NAME>_export.h) suitable for preprocessor inclusion which contains EXPORT macros to be used in library classes
-GENERATE_EXPORT_HEADER(
-	${TUTO_LIB_NAME}
-	BASE_NAME ${TUTO_EXPORT_BASE_NAME}
-    EXPORT_MACRO_NAME ${TUTO_EXPORT_MACRO_NAME}
-)
 
 ###############################################################################
 ############################## INSTALL/PACKAGING ##############################
@@ -98,8 +107,11 @@ GENERATE_EXPORT_HEADER(
 # https://cmake.org/cmake/help/latest/command/install.html
 # install the include files
 install(
-	FILES ${HEADERS}
-	DESTINATION ${TUTO_INCLUDE_INSTALL_DIR}/${TUTO_LIB_NAME}
+	FILES
+		${HEADERS}
+		${GENERATED_DIR}/${TUTO_EXPORT_FILE_NAME}
+	DESTINATION
+		${TUTO_INCLUDE_INSTALL_DIR}/${TUTO_LIB_NAME}
 )
 
 # install the library
