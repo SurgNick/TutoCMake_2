@@ -52,13 +52,6 @@ set(HEADERS
 
 add_library(${TUTO_LIB_NAME} ${SOURCES} ${HEADERS})
 
-# Set VERSION property (optional but it is a good practice)
-set_target_properties(
-	${TUTO_LIB_NAME}
-	PROPERTIES
-		VERSION ${PROJECT_VERSION}
-		WINDOWS_EXPORT_ALL_SYMBOLS ON
-)
 
 # generate a file suitable for preprocessor inclusion which contains EXPORT macros to be used in library classes
 generate_export_header(
@@ -79,7 +72,7 @@ target_include_directories(${TUTO_LIB_NAME} PUBLIC
 
 # https://cmake.org/cmake/help/v3.20/guide/tutorial/index.html?highlight=export%20symbol#mixing-static-and-shared-step-9
 # define the symbol stating we are using the declspec(dllexport) when building on windows
-target_compile_definitions(${TUTO_LIB_NAME} PUBLIC "${TUTO_EXPORT_MACRO_NAME}")
+target_compile_definitions(${TUTO_LIB_NAME} PRIVATE "TutoCMakeLib_EXPORTS")
 
 ###############################################################################
 ################################### CONFIG ####################################
