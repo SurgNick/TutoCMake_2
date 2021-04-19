@@ -15,12 +15,12 @@ project(
 #################################### SETUP ####################################
 ###############################################################################
 
-set(TUTO_LIB_NAME TutoCMakeLib)
-set(TUTO_INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/include)
-set(TUTO_CONFIG_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME})
+set(TUTO_LIB_NAME "TutoCMakeLib")
+set(TUTO_INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(TUTO_CONFIG_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/cmake/${TUTO_LIB_NAME}")
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 
-set(TUTO_LIB_TARGET_NAME ${TUTO_LIB_NAME}Targets)
+set(TUTO_LIB_TARGET_NAME "${TUTO_LIB_NAME}Targets")
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" OFF)
 
@@ -35,8 +35,8 @@ set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
 message(STATUS "Generated files goes in : ${GENERATED_DIR}")
 file(MAKE_DIRECTORY ${GENERATED_DIR})
 
-set(TUTO_EXPORT_FILE_NAME ${TUTO_LIB_NAME}_export.h)
-set(TUTO_EXPORT_MACRO_NAME TUTO_MYLIB_EXPORT)
+set(TUTO_EXPORT_FILE_NAME "${TUTO_LIB_NAME}_export.h")
+set(TUTO_EXPORT_MACRO_NAME "TUTO_MYLIB_EXPORT")
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -52,6 +52,13 @@ set(HEADERS
 
 add_library(${TUTO_LIB_NAME} ${SOURCES} ${HEADERS})
 
+# Set VERSION property (optional but it is a good practice)
+set_target_properties(
+	${TUTO_LIB_NAME}
+	PROPERTIES
+		VERSION ${PROJECT_VERSION}
+		WINDOWS_EXPORT_ALL_SYMBOLS ON
+)
 
 # generate a file suitable for preprocessor inclusion which contains EXPORT macros to be used in library classes
 generate_export_header(
