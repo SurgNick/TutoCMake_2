@@ -51,12 +51,14 @@ else()
 endif()
 
 
+# https://cmake.org/cmake/help/latest/command/configure_file.html
 configure_file(
 	cmake/UserProjectInstallConfigure.cmake.in
 	cmake/UserProjectInstallConfigure.cmake
 	@ONLY
 )
 
+# https://cmake.org/cmake/help/latest/command/install.html#script
 install(
 	CODE [[ 
 		set(USER_TARGET_FILE "$<TARGET_FILE:insane>")

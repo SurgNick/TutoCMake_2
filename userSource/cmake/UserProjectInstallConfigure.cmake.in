@@ -1,5 +1,6 @@
 
 
+# https://cmake.org/cmake/help/latest/command/file.html#get-runtime-dependencies
 file(GET_RUNTIME_DEPENDENCIES
     RESOLVED_DEPENDENCIES_VAR deps_resolved
     UNRESOLVED_DEPENDENCIES_VAR deps_unresolved
@@ -20,6 +21,7 @@ message(STATUS "CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
 foreach(dep ${deps_resolved})
 
+    # https://cmake.org/cmake/help/latest/command/file.html#install
     # important : use @ CMAKE_INSTALL_PREFIX @ because ${CMAKE_INSTALL_PREFIX} has a different value when using cpack
     # file(INSTALL ${dep} DESTINATION @CMAKE_INSTALL_PREFIX@/bin) # Does not work
 
