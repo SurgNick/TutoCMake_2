@@ -1,0 +1,29 @@
+
+
+file(GET_RUNTIME_DEPENDENCIES
+    RESOLVED_DEPENDENCIES_VAR deps_resolved
+    UNRESOLVED_DEPENDENCIES_VAR deps_unresolved
+    CONFLICTING_DEPENDENCIES_PREFIX deps_conflicting
+
+	EXECUTABLES ${USER_TARGET_FILE}
+    DIRECTORIES @USER_DEP_DIR@
+
+    POST_EXCLUDE_REGEXES @USER_POST_EXCLUDE_REGEXES@
+)
+
+message("STATUS deps_resolved    : ${deps_resolved}")
+# message(STATUS "deps_unresolved  : ${deps_unresolved}")
+message("STATUS deps_conflicting : ${deps_conflicting}")
+
+message("CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
+message("CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+
+foreach(dep ${deps_resolved})
+
+    # important : use @ CMAKE_INSTALL_PREFIX @ because ${CMAKE_INSTALL_PREFIX} has a different value when using cpack
+    # file(INSTALL ${dep} DESTINATION @CMAKE_INSTALL_PREFIX@/bin) # Does not work
+
+    # cpack will rewrite the value of CMAKE_INSTALL_PREFIX to its appropriate install dir
+    file(INSTALL DESTINATION ${CMAKE_INSTALL_PREFIX}/bin TYPE FILE FILES ${dep})
+
+endforeach()

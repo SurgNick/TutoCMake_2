@@ -16,7 +16,7 @@ project(
 ###############################################################################
 
 set(USER_EXE_NAME insane)
-set(CMAKE_PREFIX_PATH ../install)
+set(CMAKE_PREFIX_PATH "../install" CACHE PATH "Prefix search path to look for the needed libraries")
 # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#config-file-packages
 # https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html
 
@@ -40,36 +40,27 @@ install(
     DESTINATION bin
 )
 
+# Where to find the lib. USER_DEP_DIR is used in file(GET_RUNTIME_DEPENDENCIES) to search for dependencies and find the .dll or .so (...) files
+set(USER_DEP_DIR "${CMAKE_INSTALL_PREFIX}/../install/bin")
+
+# USER_POST_EXCLUDE_REGEXES used to exclude the system dependencies
+# if (WIN32) ...
+set(USER_POST_EXCLUDE_REGEXES "system32")
+# endif()
 
 
-install(CODE
-	[[
-	file(GET_RUNTIME_DEPENDENCIES
-		RESOLVED_DEPENDENCIES_VAR deps_resolved
-		UNRESOLVED_DEPENDENCIES_VAR deps_unresolved
-		CONFLICTING_DEPENDENCIES_PREFIX deps_conflicting
-		EXECUTABLES $<TARGET_FILE:insane>
-		DIRECTORIES ${CMAKE_INSTALL_PREFIX}/../install/bin
-		POST_EXCLUDE_REGEXES "system32"
-		)
-		message(STATUS "deps_resolved    : ${deps_resolved}")
-		# message(STATUS "deps_unresolved  : ${deps_unresolved}")
-		message(STATUS "deps_conflicting : ${deps_conflicting}")
-		message("CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
-        foreach(dep ${deps_resolved})
-			# install(
-			# 	FILES
-			# 		${dep}
-			# 	RUNTIME DESTINATION
-			# 		${CMAKE_INSTALL_PREFIX}/bin
-			# )
+configure_file(
+	cmake/UserProjectInstallConfigure.cmake.in
+	cmake/UserProjectInstallConfigure.cmake
+	@ONLY
+)
 
-	        file(INSTALL ${dep} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
-
-	        # file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE SHARED_LIBRARY FILES "${deps_resolved}")
-
-		endforeach()
-		]]
+install(
+	CODE [[ 
+		set(USER_TARGET_FILE "$<TARGET_FILE:insane>")
+	]] 
+	SCRIPT
+		${CMAKE_CURRENT_BINARY_DIR}/cmake/UserProjectInstallConfigure.cmake
 )
 
 
