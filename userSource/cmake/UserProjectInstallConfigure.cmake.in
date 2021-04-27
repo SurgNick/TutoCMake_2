@@ -11,12 +11,12 @@ file(GET_RUNTIME_DEPENDENCIES
     POST_EXCLUDE_REGEXES @USER_POST_EXCLUDE_REGEXES@
 )
 
-message("STATUS deps_resolved    : ${deps_resolved}")
+message(STATUS "deps_resolved    : ${deps_resolved}")
 # message(STATUS "deps_unresolved  : ${deps_unresolved}")
-message("STATUS deps_conflicting : ${deps_conflicting}")
+message(STATUS "deps_conflicting : ${deps_conflicting}")
 
-message("CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
-message("CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
+message(STATUS "CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
 foreach(dep ${deps_resolved})
 

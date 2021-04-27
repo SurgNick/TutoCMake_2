@@ -44,9 +44,11 @@ install(
 set(USER_DEP_DIR "${CMAKE_INSTALL_PREFIX}/../install/bin")
 
 # USER_POST_EXCLUDE_REGEXES used to exclude the system dependencies
-# if (WIN32) ...
-set(USER_POST_EXCLUDE_REGEXES "system32")
-# endif()
+if(WIN32)
+	set(USER_POST_EXCLUDE_REGEXES "system32")
+else()
+	set(USER_POST_EXCLUDE_REGEXES "")
+endif()
 
 
 configure_file(
@@ -65,6 +67,6 @@ install(
 
 
 set(CPACK_GENERATOR "ZIP")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Nicolas Ariba")
+set(CPACK_PACKAGE_DIRECTORY "CPack")
 
 include(CPack)
