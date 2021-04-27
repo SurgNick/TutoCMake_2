@@ -1,7 +1,6 @@
 
-#ifndef MYLIB_HPP
-#define MYLIB_HPP
+#pragma once
 
-int insaneMath(int);
+#include "TutoCMakeLib_export.h"
 
-#endif
+TUTOCMAKELIB_EXPORT int insaneMath(int);
