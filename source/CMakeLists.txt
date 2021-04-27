@@ -150,34 +150,3 @@ install(
 	DESTINATION ${TUTO_CONFIG_INSTALL_DIR_RELATIVE}
 	NAMESPACE "TUTOCMAKE2::"
 )
-
-
-###############################################################################
-################################### CPACK #####################################
-###############################################################################
-
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-
-# https://cmake.org/cmake/help/latest/variable/CMAKE_INSTALL_RPATH_USE_LINK_PATH.html?highlight=cmake_install_rpath_use_link_path
-# https://cmake.org/cmake/help/latest/policy/CMP0095.html#policy:CMP0095
-
-set(CPACK_GENERATOR "ZIP")
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Nicolas Ariba")
-
-include(CPack)
-
-
-install(CODE
-	[[
-	file(GET_RUNTIME_DEPENDENCIES
-		RESOLVED_DEPENDENCIES_VAR myDep
-		UNRESOLVED_DEPENDENCIES_VAR unresolvedMyDep
-		CONFLICTING_DEPENDENCIES_PREFIX conflictingMyDep
-		LIBRARIES TutoCMakeLib.dll
-		)
-		message("myDep            : ${myDep}")
-		# message("unresolvedMyDep  : ${unresolvedMyDep}")
-		message("conflictingMyDep : ${conflictingMyDep}")
-	]]
-)
