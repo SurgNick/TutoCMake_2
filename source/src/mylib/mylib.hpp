@@ -3,4 +3,4 @@
 
 #include "TutoCMakeLib_export.h"
 
-TUTO_MYLIB_EXPORT int insaneMath(int);
+TUTOCMAKELIB_EXPORT int insaneMath(int);
