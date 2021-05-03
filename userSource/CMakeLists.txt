@@ -39,7 +39,7 @@ install(
     TARGETS ${USER_EXE_NAME}
 	# https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#output-artifacts
     RUNTIME DESTINATION bin
-	COMPONENT applications
+	# COMPONENT applications
 )
 
 # Where to find the lib. USER_DEP_DIR is used in file(GET_RUNTIME_DEPENDENCIES) to search for dependencies and find the .dll or .so (...) files
@@ -108,33 +108,60 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY "Insane Math")
 # set(CPACK_NSIS_MUI_ICON "VIRUS.ico")
 
 
+################################# COMPONENTS ##################################
+
 # https://dominoc925.blogspot.com/2016/09/create-windows-installer-using-cmake.html
 
-# Define components and their display names
-set(CPACK_COMPONENTS_ALL applications libraries headers)
-# CPACK_COMPONENT_<compName>_DISPLAY_NAME
-set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Insane Applications")
-set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
-set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
+# # Define components and their display names
+# set(CPACK_COMPONENTS_ALL applications libraries headers)
+# # CPACK_COMPONENT_<compName>_DISPLAY_NAME
+# set(CPACK_COMPONENT_APPLICATIONS_DISPLAY_NAME "Insane Applications")
+# set(CPACK_COMPONENT_LIBRARIES_DISPLAY_NAME "Libraries")
+# set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
 
-# Define dependencies between components
-set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
+# # Define dependencies between components
+# set(CPACK_COMPONENT_HEADERS_DEPENDS libraries)
 
-# Define groups
-set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
-set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
-set(CPACK_COMPONENT_HEADERS_GROUP "Development")
+# # Define groups
+# set(CPACK_COMPONENT_APPLICATIONS_GROUP "Runtime")
+# set(CPACK_COMPONENT_LIBRARIES_GROUP "Development")
+# set(CPACK_COMPONENT_HEADERS_GROUP "Development")
 
-set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
-   "All of the tools you'll ever need to develop software"
+# set(CPACK_COMPONENT_GROUP_DEVELOPMENT_DESCRIPTION
+#    "All of the tools you'll ever need to develop software"
+# )
+
+# # Define NSIS installation types, what are these lines for ? idk
+# set(CPACK_ALL_INSTALL_TYPES Full Developer)
+# set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
+# set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
+# set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
+
+
+
+# SET(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "MessageBox MB_OK \\\"Hello world!\\\"")
+# SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "MessageBox MB_OK \\\"Hello world!\\\"")
+
+# SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+# 	SetOutPath \\\"${CMAKE_CURRENT_SOURCE_DIR}\\\"
+# 	MessageBox MB_OK \\\"Hello world!\\\"
+# 	MessageBox MB_YESNO \\\"Install Microsoft Visual C++ : Run VC_redist.x64.exe ?\\\" /SD IDYES IDNO endMSVC
+# 		File \\\"${CMAKE_CURRENT_SOURCE_DIR}/VC_redist.x64.exe\\\"
+# 		ExecWait \\\"${CMAKE_CURRENT_SOURCE_DIR}/VC_redist.x64.exe\\\"
+# 	endMSVC:
+# ")
+
+
+# https://cmake.org/pipermail/cmake/2012-January/048540.html
+install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/VC_redist.x64.exe
+	DESTINATION tmp
+	# COMPONENT installers
 )
 
-# Define NSIS installation types, what are these lines for ? idk
-set(CPACK_ALL_INSTALL_TYPES Full Developer)
-set(CPACK_COMPONENT_LIBRARIES_INSTALL_TYPES Developer Full)
-set(CPACK_COMPONENT_HEADERS_INSTALL_TYPES Developer Full)
-set(CPACK_COMPONENT_APPLICATIONS_INSTALL_TYPES Full)
-
+SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+	MessageBox MB_YESNO \\\"Install Microsoft Visual C++ : Run VC_redist.x64.exe ?\\\"
+	ExecWait '$INSTDIR\\\\tmp\\\\VC_redist.x64.exe'
+")
 
 INCLUDE(CPack)
 
