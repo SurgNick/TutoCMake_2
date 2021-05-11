@@ -11,6 +11,9 @@ project(
     LANGUAGES CXX
 )
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 ###############################################################################
 #################################### SETUP ####################################
 ###############################################################################
@@ -23,13 +26,22 @@ set(CMAKE_PREFIX_PATH "../install" CACHE PATH "Prefix search path to look for th
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 find_package(TutoCMakeLib REQUIRED)
 
+find_package(Qt5 5.12 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
+
+
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
 ###############################################################################
 
-add_executable(${USER_EXE_NAME} main.cpp)
+add_executable(${USER_EXE_NAME}
+    main.cpp
+    qml.qrc
+)
 
-target_link_libraries(${USER_EXE_NAME} PUBLIC TUTOCMAKE2::TutoCMakeLib)
+target_link_libraries(${USER_EXE_NAME} PUBLIC
+    TUTOCMAKE2::TutoCMakeLib
+    Qt5::Charts Qt5::Concurrent Qt5::Multimedia Qt5::Qml Qt5::Quick Qt5::Xml
+)
 
 ###############################################################################
 ############################## INSTALL/PACKAGING ##############################
@@ -47,7 +59,7 @@ set(USER_DEP_DIR "${CMAKE_INSTALL_PREFIX}/../install/bin")
 if(WIN32)
 	set(USER_POST_EXCLUDE_REGEXES "system32")
 else()
-	set(USER_POST_EXCLUDE_REGEXES "")
+        set(USER_POST_EXCLUDE_REGEXES "")
 endif()
 
 

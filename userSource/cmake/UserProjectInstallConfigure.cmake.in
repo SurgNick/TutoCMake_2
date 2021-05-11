@@ -19,13 +19,16 @@ message(STATUS "deps_conflicting : ${deps_conflicting}")
 message(STATUS "CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
 message(STATUS "CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
 
-foreach(dep ${deps_resolved})
+#foreach(dep ${deps_resolved})
 
-    # https://cmake.org/cmake/help/latest/command/file.html#install
-    # important : use @ CMAKE_INSTALL_PREFIX @ because ${CMAKE_INSTALL_PREFIX} has a different value when using cpack
-    # file(INSTALL ${dep} DESTINATION @CMAKE_INSTALL_PREFIX@/bin) # Does not work
+#    # https://cmake.org/cmake/help/latest/command/file.html#install
+#    # important : use @ CMAKE_INSTALL_PREFIX @ because ${CMAKE_INSTALL_PREFIX} has a different value when using cpack
+#    # file(INSTALL ${dep} DESTINATION @CMAKE_INSTALL_PREFIX@/bin) # Does not work
 
-    # cpack will rewrite the value of CMAKE_INSTALL_PREFIX to its appropriate install dir
-    file(INSTALL DESTINATION ${CMAKE_INSTALL_PREFIX}/bin TYPE FILE FILES ${dep})
+#    # cpack will rewrite the value of CMAKE_INSTALL_PREFIX to its appropriate install dir
+#    file(INSTALL DESTINATION ${CMAKE_INSTALL_PREFIX}/bin TYPE FILE FILES ${dep} FOLLOW_SYMLINK_CHAIN)
 
-endforeach()
+
+#endforeach()
+
+file(INSTALL ${deps_resolved} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin FOLLOW_SYMLINK_CHAIN)

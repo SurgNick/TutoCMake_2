@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <!-- app files -->
+        <file>apps/main.qml</file>
+        <file>apps/AppSelector.qml</file>
+        <file>apps/SplashImage.qml</file>
+    </qresource>
+</RCC>
