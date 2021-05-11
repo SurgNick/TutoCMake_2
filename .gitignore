@@ -16,3 +16,7 @@ userbuild
 userBuild
 userinstall
 userInstall
+qtuserbuilddebug
+qtuserinstalldebug
+qtuserbuildrelease
+qtuserinstallrelease
