@@ -14,6 +14,14 @@ project(
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+# not good as it uses absolute paths
+# set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+SET(CMAKE_INSTALL_RPATH
+       "$ORIGIN/../lib")
+
 ###############################################################################
 #################################### SETUP ####################################
 ###############################################################################
@@ -43,6 +51,10 @@ target_link_libraries(${USER_EXE_NAME} PUBLIC
     Qt5::Charts Qt5::Concurrent Qt5::Multimedia Qt5::Qml Qt5::Quick Qt5::Xml
 )
 
+target_link_options(${USER_EXE_NAME}
+    PUBLIC "LINKER:--disable-new-dtags"
+)
+
 ###############################################################################
 ############################## INSTALL/PACKAGING ##############################
 ###############################################################################
@@ -50,6 +62,7 @@ target_link_libraries(${USER_EXE_NAME} PUBLIC
 install(
     TARGETS ${USER_EXE_NAME}
     DESTINATION bin
+    # RUNTIME
 )
 
 # Where to find the lib. USER_DEP_DIR is used in file(GET_RUNTIME_DEPENDENCIES) to search for dependencies and find the .dll or .so (...) files
@@ -79,8 +92,9 @@ install(
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/UserProjectInstallConfigure.cmake
 )
 
+set(CPACK_PACKAGE_CONTACT "un sudiste quelconque")
 
-set(CPACK_GENERATOR "ZIP")
+set(CPACK_GENERATOR "ZIP" "DEB")
 set(CPACK_PACKAGE_DIRECTORY "CPack")
 
 include(CPack)
