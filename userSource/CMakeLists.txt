@@ -72,7 +72,7 @@ set(USER_DEP_DIR "${CMAKE_INSTALL_PREFIX}/../install/bin")
 if(WIN32)
 	set(USER_POST_EXCLUDE_REGEXES "system32")
 else()
-        set(USER_POST_EXCLUDE_REGEXES "")
+    set(USER_POST_EXCLUDE_REGEXES "linux-gnu")
 endif()
 
 
