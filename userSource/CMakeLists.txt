@@ -11,8 +11,8 @@ project(
     LANGUAGES CXX
 )
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTORCC ON)
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
@@ -36,20 +36,35 @@ find_package(TutoCMakeLib REQUIRED)
 
 find_package(Qt5 5.12 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
 
-
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
 ###############################################################################
 
-add_executable(${USER_EXE_NAME}
+set(SOURCES
     main.cpp
     qml.qrc
+)
+
+message("LALALALALALALAAAAAAAAAAA ${QML_IMPORT_PATH}")
+set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml CACHE STRING "" FORCE)
+
+# qt5_wrap_cpp(SOURCES ${SOURCES})
+qt5_add_resources(SOURCES qml.qrc)
+
+
+add_executable(${USER_EXE_NAME}
+    ${SOURCES}
 )
 
 target_link_libraries(${USER_EXE_NAME} PUBLIC
     TUTOCMAKE2::TutoCMakeLib
     Qt5::Charts Qt5::Concurrent Qt5::Multimedia Qt5::Qml Qt5::Quick Qt5::Xml
 )
+
+# CMake with Qt5.14
+# qt5_import_plugins(${USER_EXE_NAME} 
+#     INCLUDE Qt5::QtGraphicalEffects
+# )
 
 target_link_options(${USER_EXE_NAME}
     PUBLIC "LINKER:--disable-new-dtags"

@@ -6,8 +6,8 @@ import QtQml 2.2
 
 Window {
     id: rootAppSel
-    x: 50
-    y: 50
+    x: Qt.application.screens[0].virtualX + 400
+    y: Qt.application.screens[0].virtualY + 400
     width: 300
     height: 300
 
@@ -22,6 +22,28 @@ Window {
         width: 200
         height: 100
         color: "light green"
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log("Rectangle Clicked")
+            }
+        }
+    }
+
+    ClickableImageWidget {
+        width: 100
+        height: 110
+        border.color: "#708090"
+        border.width: 3
+        radius: 10
+
+        source: "qrc:/robin.png"
+        // overlayColor: "purple"
+        onClicked: {
+            console.log("ClickableImageWidget clicked")
+            appLoader.source = "qrc:/apps/main.qml"
+        }
     }
 
     Timer {
@@ -31,6 +53,15 @@ Window {
         onTriggered: {
             console.log("AppSelector timeout")
             rootAppSel.timeout()
+        }
+    }
+
+    Loader {
+        id: appLoader
+        onLoaded: {
+            rootAppSel.visible = false
+            item.visible = true
+            item.showFullScreen()
         }
     }
 }

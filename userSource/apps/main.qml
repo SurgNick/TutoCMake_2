@@ -20,6 +20,7 @@ Item {
     Component {
         id: splashComponent
         SplashImage {
+            visible: true
             onTimeout: {
                 rootMain.state = "appSelector"
             }
@@ -28,7 +29,9 @@ Item {
 
     Component {
         id: appSelectorComponent
-        AppSelector { }
+        AppSelector {
+            visible: true
+        }
     }
 
     states: [

@@ -4,5 +4,8 @@
         <file>apps/main.qml</file>
         <file>apps/AppSelector.qml</file>
         <file>apps/SplashImage.qml</file>
+        <file>apps/ClickableImageWidget.qml</file>
+        <file>apps/IconWidget.qml</file>
+        <file>robin.png</file>
     </qresource>
 </RCC>
