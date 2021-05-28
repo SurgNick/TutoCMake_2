@@ -1,8 +1,8 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Window 2.12
+import QtQuick 2.14
+import QtQuick.Controls 2.14
+import QtQuick.Window 2.14
 
-import QtQml 2.2
+import QtQml 2.14
 
 Window {
     id: rootAppSel

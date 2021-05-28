@@ -34,7 +34,7 @@ set(CMAKE_PREFIX_PATH "../install" CACHE PATH "Prefix search path to look for th
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 find_package(TutoCMakeLib REQUIRED)
 
-find_package(Qt5 5.12 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
+find_package(Qt5 5.14 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -62,9 +62,9 @@ target_link_libraries(${USER_EXE_NAME} PUBLIC
 )
 
 # CMake with Qt5.14
-# qt5_import_plugins(${USER_EXE_NAME} 
-#     INCLUDE Qt5::QtGraphicalEffects
-# )
+qt5_import_plugins(${USER_EXE_NAME} 
+    INCLUDE Qt5::QtGraphicalEffects
+)
 
 target_link_options(${USER_EXE_NAME}
     PUBLIC "LINKER:--disable-new-dtags"
