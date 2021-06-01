@@ -28,6 +28,9 @@ SET(CMAKE_INSTALL_RPATH
 
 set(USER_EXE_NAME insane)
 set(CMAKE_PREFIX_PATH "../install" CACHE PATH "Prefix search path to look for the needed libraries")
+
+set(USER_SHOW_DEPS "0" CACHE STRING "Display install dependencies info if set to 1")
+
 # https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html#config-file-packages
 # https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html
 

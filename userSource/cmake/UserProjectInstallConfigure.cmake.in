@@ -12,23 +12,13 @@ file(GET_RUNTIME_DEPENDENCIES
     POST_EXCLUDE_REGEXES @USER_POST_EXCLUDE_REGEXES@
 )
 
-message(STATUS "deps_resolved    : ${deps_resolved}")
-# message(STATUS "deps_unresolved  : ${deps_unresolved}")
-message(STATUS "deps_conflicting : ${deps_conflicting}")
+if (@USER_SHOW_DEPS@)
+    message(STATUS "deps_resolved    : ${deps_resolved}")
+    message(STATUS "deps_unresolved  : ${deps_unresolved}")
+    message(STATUS "deps_conflicting : ${deps_conflicting}")
 
-message(STATUS "CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
-message(STATUS "CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
-
-#foreach(dep ${deps_resolved})
-
-#    # https://cmake.org/cmake/help/latest/command/file.html#install
-#    # important : use @ CMAKE_INSTALL_PREFIX @ because ${CMAKE_INSTALL_PREFIX} has a different value when using cpack
-#    # file(INSTALL ${dep} DESTINATION @CMAKE_INSTALL_PREFIX@/bin) # Does not work
-
-#    # cpack will rewrite the value of CMAKE_INSTALL_PREFIX to its appropriate install dir
-#    file(INSTALL DESTINATION ${CMAKE_INSTALL_PREFIX}/bin TYPE FILE FILES ${dep} FOLLOW_SYMLINK_CHAIN)
-
-
-#endforeach()
+    message(STATUS "CMAKE CMAKE_INSTALL_PREFIX : @CMAKE_INSTALL_PREFIX@")
+    message(STATUS "CPACK CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+endif()
 
 file(INSTALL ${deps_resolved} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib FOLLOW_SYMLINK_CHAIN)
