@@ -38,11 +38,12 @@ Window {
         border.width: 3
         radius: 10
 
-        source: "qrc:/robin.png"
+
+        source: "qrc:///robin"
         // overlayColor: "purple"
         onClicked: {
             console.log("ClickableImageWidget clicked")
-            appLoader.source = "qrc:/apps/main.qml"
+            appLoader.source = "qrc:///apps/main.qml"
         }
     }
 
@@ -61,7 +62,7 @@ Window {
         onLoaded: {
             rootAppSel.visible = false
             item.visible = true
-            item.showFullScreen()
+            // item.showFullScreen()
         }
     }
 }

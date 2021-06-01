@@ -3,6 +3,7 @@
 #include <QQmlApplicationEngine>
 #include <QtPlugin>
 
+// #include <QQuickWindow>
 
 #include <iostream>
 #include <TutoCMakeLib/mylib.hpp>
@@ -12,6 +13,9 @@
 
 
 int main(int argc, char *argv[]) {
+
+    // Q_INIT_RESOURCE(myqml);
+
     std::cout << "bonsoir" << std::endl;
     std::cout << insaneMath(2) << std::endl;
 
@@ -19,7 +23,8 @@ int main(int argc, char *argv[]) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
 
-
+    // std::cout << QQuickWindow::sceneGraphBackend().toStdString() << std::endl; 
+    // QQuickWindow::setSceneGraphBackend(QSGRendererInterface::GraphicsApi::OpenGL);
 
     QGuiApplication app(argc, argv);
 
@@ -41,7 +46,7 @@ int main(int argc, char *argv[]) {
 //            QCoreApplication::exit(-1);
 //    }, Qt::QueuedConnection);
 //    engine.load(url);
-    engine.load(QUrl(QStringLiteral("qrc:/apps/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:///apps/main.qml")));
 
     return app.exec();
 }

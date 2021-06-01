@@ -13,6 +13,7 @@ Rectangle {
     signal clicked
 
     IconWidget{
+        // overlayColor: "#FFFFFFFF"
         id: icon
         width: 0.95 * parent.width
         height: 0.95 * parent.height

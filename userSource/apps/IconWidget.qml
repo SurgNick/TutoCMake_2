@@ -12,15 +12,15 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
-        source: "qrc:/robin.png"
-        visible: false
+        source: "qrc:///robin"
+        visible:false
     }
     ColorOverlay{
         id: imageOverlay
         anchors.fill: image
-        cached: true
+        // cached: true
         source: image
         // color: "black"
+        color: Qt.rgba(.5,.5,.5,.5)
     }
 }

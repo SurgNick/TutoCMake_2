@@ -34,7 +34,7 @@ set(CMAKE_PREFIX_PATH "../install" CACHE PATH "Prefix search path to look for th
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 find_package(TutoCMakeLib REQUIRED)
 
-find_package(Qt5 5.14 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
+find_package(Qt5 5.14 COMPONENTS Gui Charts Concurrent Multimedia Qml Quick Xml)
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -42,16 +42,18 @@ find_package(Qt5 5.14 COMPONENTS Charts Concurrent Multimedia Qml Quick Xml)
 
 set(SOURCES
     main.cpp
-    qml.qrc
 )
 
 message("LALALALALALALAAAAAAAAAAA ${QML_IMPORT_PATH}")
 set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml CACHE STRING "" FORCE)
 
 # qt5_wrap_cpp(SOURCES ${SOURCES})
-qt5_add_resources(SOURCES qml.qrc)
+qt5_add_resources(SOURCES myqml.qrc
+    OPTIONS
+    --verbose
+)
 
-
+message("Sources :::: ${SOURCES}")
 add_executable(${USER_EXE_NAME}
     ${SOURCES}
 )
@@ -69,6 +71,11 @@ qt5_import_plugins(${USER_EXE_NAME}
 target_link_options(${USER_EXE_NAME}
     PUBLIC "LINKER:--disable-new-dtags"
 )
+
+# message("INCLUDE DIRS :::: ${Qt5Widgets_INCLUDE_DIRS} : ${QtQml_INCLUDE_DIRS}")
+# target_include_directories(${USER_EXE_NAME} PUBLIC
+#     $<BUILD_INTERFACE:${Qt5Widgets_INCLUDE_DIRS} ${QtQml_INCLUDE_DIRS}>
+# )
 
 ###############################################################################
 ############################## INSTALL/PACKAGING ##############################
