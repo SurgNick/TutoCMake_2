@@ -10,13 +10,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
-build
-install
-userbuild
-userBuild
-userinstall
-userInstall
-qtuserbuilddebug
-qtuserinstalldebug
-qtuserbuildrelease
-qtuserinstallrelease
+*build*
+*install*
+.vscode
