@@ -37,7 +37,7 @@ set(USER_SHOW_DEPS "0" CACHE STRING "Display install dependencies info if set to
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 find_package(TutoCMakeLib REQUIRED)
 
-find_package(Qt5 5.14 COMPONENTS Gui Charts Concurrent Multimedia Qml Quick Xml)
+find_package(Qt5 5.14 COMPONENTS Gui Qml Quick DBus QmlWorkerScript QuickControls2 QuickTemplates2 XcbQpa)
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -47,7 +47,7 @@ set(SOURCES
     main.cpp
 )
 
-message("LALALALALALALAAAAAAAAAAA ${QML_IMPORT_PATH}")
+message(STATUS "QML_IMPORT_PATH : ${QML_IMPORT_PATH}")
 set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml CACHE STRING "" FORCE)
 
 # qt5_wrap_cpp(SOURCES ${SOURCES})
@@ -56,14 +56,14 @@ qt5_add_resources(SOURCES myqml.qrc
     --verbose
 )
 
-message("Sources :::: ${SOURCES}")
+message(STATUS "Sources : ${SOURCES}")
 add_executable(${USER_EXE_NAME}
     ${SOURCES}
 )
 
 target_link_libraries(${USER_EXE_NAME} PUBLIC
     TUTOCMAKE2::TutoCMakeLib
-    Qt5::Charts Qt5::Concurrent Qt5::Multimedia Qt5::Qml Qt5::Quick Qt5::Xml
+    Qt5::Gui Qt5::Qml Qt5::Quick Qt5::DBus Qt5::QmlWorkerScript Qt5::QuickControls2 Qt5::QuickTemplates2 Qt5::XcbQpa
 )
 
 # CMake with Qt5.14
@@ -81,7 +81,78 @@ target_link_options(${USER_EXE_NAME}
 # )
 
 ###############################################################################
-############################## INSTALL/PACKAGING ##############################
+################################# INSTALL QT ##################################
+###############################################################################
+
+# message("Qt5Gui_COMPILE_DEFINITIONS      : ${Qt5Gui_COMPILE_DEFINITIONS}")
+# message("Qt5Gui_DEFINITIONS              : ${Qt5Gui_DEFINITIONS}")
+# message("Qt5Gui_EXECUTABLE_COMPILE_FLAGS : ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
+# message("Qt5Gui_FOUND                    : ${Qt5Gui_FOUND}")
+# message("Qt5Gui_INCLUDE_DIRS             : ${Qt5Gui_INCLUDE_DIRS}")
+# message("Qt5Gui_LIBRARIES                : ${Qt5Gui_LIBRARIES}")
+# message("Qt5Gui_PRIVATE_INCLUDE_DIRS     : ${Qt5Gui_PRIVATE_INCLUDE_DIRS}")
+# message("Qt5Gui_VERSION_STRING           : ${Qt5Gui_VERSION_STRING}")
+
+# message(STATUS "Qt5Gui_PLUGINS : ${Qt5Gui_PLUGINS}")
+
+
+# https://stackoverflow.com/questions/35765106/symbolic-links-cmake/41037224
+macro(install_symlink filepath sympath)
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})")
+    install(CODE "message(\"-- Created symlink: ${sympath} -> ${filepath}\")")
+endmacro(install_symlink)
+
+
+set(QtDeps)
+
+get_target_property(QtDep Qt5::QXcbIntegrationPlugin LOCATION)
+list(APPEND QtDeps "${QtDep}")
+
+# # Done at Configure time
+# file(INSTALL ${QtDeps} DESTINATION "bin/platforms")
+
+# Done at install time
+install(FILES
+    ${QtDeps}
+    DESTINATION "bin/platforms"
+)
+
+set(QtDeps)
+
+set(QtNeededLibs
+    Qt5::DBus
+    Qt5::QmlModels
+    Qt5::QmlWorkerScript
+    Qt5::Quick
+    Qt5::QuickControls2
+    Qt5::QuickTemplates2
+    Qt5::XcbQpa
+)
+
+foreach(QtNeededLib ${QtNeededLibs})
+    get_target_property(QtDepFile ${QtNeededLib} LOCATION)
+    list(APPEND QtDeps "${QtDepFile}")
+endforeach()
+
+# file(INSTALL ${QtDeps} DESTINATION "bin/lib" FOLLOW_SYMLINK_CHAIN)
+
+message("QtDeps ${QtDeps}")
+install(FILES
+    ${QtDeps}
+    DESTINATION "lib"
+)
+
+foreach(QtNeededLib ${QtNeededLibs})
+    get_target_property(QtFileSoname ${QtNeededLib} IMPORTED_SONAME_RELEASE)
+    get_target_property(QtFileLocation ${QtNeededLib} LOCATION)
+    get_filename_component(QtFileName ${QtFileLocation} NAME)
+    install_symlink(${CMAKE_INSTALL_PREFIX}/lib/${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
+endforeach()
+
+
+
+###############################################################################
+############################ INSTALL/PACKAGING APP ############################
 ###############################################################################
 
 install(
