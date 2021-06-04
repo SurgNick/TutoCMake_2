@@ -22,6 +22,9 @@ project(
 SET(CMAKE_INSTALL_RPATH
        "$ORIGIN/../lib")
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 ###############################################################################
 #################################### SETUP ####################################
 ###############################################################################
@@ -63,6 +66,7 @@ add_executable(${USER_EXE_NAME}
 
 target_link_libraries(${USER_EXE_NAME} PUBLIC
     TUTOCMAKE2::TutoCMakeLib
+    stdc++fs
     Qt5::Gui Qt5::Qml Qt5::Quick Qt5::DBus Qt5::QmlWorkerScript Qt5::QuickControls2 Qt5::QuickTemplates2 Qt5::XcbQpa
 )
 

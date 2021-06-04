@@ -2,6 +2,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtPlugin>
+#include <QDir>
 
 // #include <QQuickWindow>
 
@@ -11,6 +12,8 @@
 // Q_IMPORT_PLUGIN(QtGraphicalEffectsPlugin)
 // Q_IMPORT_PLUGIN(QtGraphicalEffectsPrivatePlugin)
 
+#include <filesystem>
+namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
 
@@ -27,9 +30,21 @@ int main(int argc, char *argv[]) {
     // QQuickWindow::setSceneGraphBackend(QSGRendererInterface::GraphicsApi::OpenGL);
 
     QGuiApplication app(argc, argv);
-
-//    QCoreApplication::addLibraryPath("/home/nicolas/document/dev/TutoCMake_2.1/qtuserbuilddebug/morelibs");
     QQmlApplicationEngine engine;
+
+    std::cout << argv[0] << std::endl;
+    std::string package_path = fs::current_path();
+    std::string current_path;
+    std::cout << "Current path is " << package_path << '\n';
+
+    current_path = package_path;
+    QCoreApplication::addLibraryPath(QString::fromStdString(current_path.append("/lib")));
+
+    current_path = package_path;
+    engine.addImportPath(QString::fromStdString(current_path.append("/bin/qml")));
+
+
+
     // engine.addImportPath("/home/nicolas/document/dev/TutoCMake_2.1/qtuserbuilddebug/morelibs");
     // engine.addImportPath("/home/nicolas/document/dev/TutoCMake_2.1/qtuserbuilddebug/QtGraphicalEffects");
     // engine.addImportPath("../QtGraphicalEffects");
