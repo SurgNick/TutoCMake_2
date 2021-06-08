@@ -178,9 +178,19 @@ install(FILES
 
 ### qml modules ###
 
-set(USER_QT_QML_DIR "${Qt5_DIR}/../../../qml")
-message("USER_QT_QML_DIR : ${USER_QT_QML_DIR}")
-install(DIRECTORY ${USER_QT_QML_DIR} DESTINATION .
+set(USER_QT_QML_DIR "${Qt5_DIR}/../../../qml/")
+
+set(USER_QT_QML_DIR_DEPS
+    QtGraphicalEffects
+    QtQml
+    QtQuick
+    QtQuick.2
+)
+
+list(TRANSFORM USER_QT_QML_DIR_DEPS PREPEND ${USER_QT_QML_DIR})
+
+# message("USER_QT_QML_DIR : ${USER_QT_QML_DIR}")
+install(DIRECTORY ${USER_QT_QML_DIR_DEPS} DESTINATION qml
         PATTERN "*.debug" EXCLUDE
 )
 
