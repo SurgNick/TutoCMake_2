@@ -100,6 +100,8 @@ target_link_options(${USER_EXE_NAME}
 # message(STATUS "Qt5Gui_PLUGINS : ${Qt5Gui_PLUGINS}")
 
 
+### Qt Libs ###
+
 # https://stackoverflow.com/questions/35765106/symbolic-links-cmake/41037224
 macro(install_symlink filepath sympath)
     install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})")
@@ -153,6 +155,34 @@ foreach(QtNeededLib ${QtNeededLibs})
     install_symlink(${CMAKE_INSTALL_PREFIX}/lib/${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
 endforeach()
 
+
+### xcbglintegrations ###
+
+set(QtNeededXcbLibs
+    Qt5::QXcbEglIntegrationPlugin
+    Qt5::QXcbGlxIntegrationPlugin
+)
+
+set(QtXcbDeps)
+
+foreach(QtNeededXcbLib ${QtNeededXcbLibs})
+    get_target_property(QtXcbDepFile ${QtNeededXcbLib} LOCATION)
+    list(APPEND QtXcbDeps "${QtXcbDepFile}")
+endforeach()
+
+install(FILES
+    ${QtXcbDeps}
+    DESTINATION "bin/xcbglintegrations"
+)
+
+
+### qml modules ###
+
+set(USER_QT_QML_DIR "${Qt5_DIR}/../../../qml")
+message("USER_QT_QML_DIR : ${USER_QT_QML_DIR}")
+install(DIRECTORY ${USER_QT_QML_DIR} DESTINATION .
+        PATTERN "*.debug" EXCLUDE
+)
 
 
 ###############################################################################
