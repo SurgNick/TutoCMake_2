@@ -2,15 +2,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QtPlugin>
-#include <QDir>
-
-// #include <QQuickWindow>
 
 #include <iostream>
 #include <TutoCMakeLib/mylib.hpp>
-
-// Q_IMPORT_PLUGIN(QtGraphicalEffectsPlugin)
-// Q_IMPORT_PLUGIN(QtGraphicalEffectsPrivatePlugin)
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -26,17 +20,22 @@ int main(int argc, char *argv[]) {
         QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     #endif
 
+    // a permis de trouver qu'il fallait installer libxcb glx et egl (dans xcbglintegrations)
     // std::cout << QQuickWindow::sceneGraphBackend().toStdString() << std::endl; 
     // QQuickWindow::setSceneGraphBackend(QSGRendererInterface::GraphicsApi::OpenGL);
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
+    // https://fr.cppreference.com/w/cpp/string/basic_string
+    // https://en.cppreference.com/w/cpp/filesystem
+
     std::cout << argv[0] << std::endl;
     std::string package_path = fs::current_path();
     std::string current_path;
     std::cout << "Current path is " << package_path << '\n';
 
+    // https://doc.qt.io/qt-5/qcoreapplication.html#addLibraryPath
     current_path = package_path;
     QCoreApplication::addLibraryPath(QString::fromStdString(current_path.append("/lib")));
 

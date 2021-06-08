@@ -11,6 +11,7 @@ project(
     LANGUAGES CXX
 )
 
+# https://doc.qt.io/qt-5/cmake-get-started.html
 # set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
@@ -20,8 +21,10 @@ project(
 # set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 SET(CMAKE_INSTALL_RPATH
-       "$ORIGIN/../lib")
+    "$ORIGIN/../lib"
+)
 
+# https://cmake.org/cmake/help/latest/variable/CMAKE_CXX_STANDARD.html#variable:CMAKE_CXX_STANDARD
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -75,6 +78,8 @@ qt5_import_plugins(${USER_EXE_NAME}
     INCLUDE Qt5::QtGraphicalEffects
 )
 
+# ( https://cmake.org/cmake/help/latest/command/target_compile_options.html#command:target_compile_options )
+# https://cmake.org/cmake/help/git-stage/command/target_link_options.html
 target_link_options(${USER_EXE_NAME}
     PUBLIC "LINKER:--disable-new-dtags"
 )
@@ -88,6 +93,7 @@ target_link_options(${USER_EXE_NAME}
 ################################# INSTALL QT ##################################
 ###############################################################################
 
+# https://doc.qt.io/qt-5.12/cmake-manual.html
 # message("Qt5Gui_COMPILE_DEFINITIONS      : ${Qt5Gui_COMPILE_DEFINITIONS}")
 # message("Qt5Gui_DEFINITIONS              : ${Qt5Gui_DEFINITIONS}")
 # message("Qt5Gui_EXECUTABLE_COMPILE_FLAGS : ${Qt5Gui_EXECUTABLE_COMPILE_FLAGS}")
@@ -148,6 +154,7 @@ install(FILES
     DESTINATION "lib"
 )
 
+# https://cmake.org/cmake/help/latest/command/get_filename_component.html
 foreach(QtNeededLib ${QtNeededLibs})
     get_target_property(QtFileSoname ${QtNeededLib} IMPORTED_SONAME_RELEASE)
     get_target_property(QtFileLocation ${QtNeededLib} LOCATION)
@@ -187,8 +194,10 @@ set(USER_QT_QML_DIR_DEPS
     QtQuick.2
 )
 
+# https://cmake.org/cmake/help/latest/command/list.html#transform
 list(TRANSFORM USER_QT_QML_DIR_DEPS PREPEND ${USER_QT_QML_DIR})
 
+# https://cmake.org/cmake/help/latest/command/install.html#directory
 # message("USER_QT_QML_DIR : ${USER_QT_QML_DIR}")
 install(DIRECTORY ${USER_QT_QML_DIR_DEPS} DESTINATION qml
         PATTERN "*.debug" EXCLUDE
