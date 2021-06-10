@@ -12,7 +12,7 @@ project(
 )
 
 # https://doc.qt.io/qt-5/cmake-get-started.html
-# set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
 # add the automatically determined parts of the RPATH
@@ -51,6 +51,11 @@ find_package(Qt5 5.14 COMPONENTS Gui Qml Quick DBus QmlWorkerScript QuickControl
 
 set(SOURCES
     main.cpp
+    Counter.cpp
+)
+
+set(HEADERS
+    Counter.hpp
 )
 
 message(STATUS "QML_IMPORT_PATH : ${QML_IMPORT_PATH}")
@@ -62,9 +67,13 @@ qt5_add_resources(SOURCES myqml.qrc
     --verbose
 )
 
+qt5_wrap_cpp(SOURCES ${HEADERS}
+    TARGET ${USER_EXE_NAME}
+)
+
 message(STATUS "Sources : ${SOURCES}")
 add_executable(${USER_EXE_NAME}
-    ${SOURCES}
+    ${SOURCES} ${HEADERS}
 )
 
 target_link_libraries(${USER_EXE_NAME} PUBLIC

@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <TutoCMakeLib/mylib.hpp>
+#include "Counter.hpp"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -61,6 +62,19 @@ int main(int argc, char *argv[]) {
 //    }, Qt::QueuedConnection);
 //    engine.load(url);
     engine.load(QUrl(QStringLiteral("qrc:///apps/main.qml")));
+
+
+
+    Counter a, b;
+    QObject::connect(&a, SIGNAL(valueChanged(int)), &b, SLOT(setValue(int)));
+
+    a.setValue(12);     // a.value() == 12, b.value() == 12
+    std::cout << a.value() << " " << b.value() << std::endl;
+
+    b.setValue(48);     // a.value() == 12, b.value() == 48
+    std::cout << a.value() << " " << b.value() << std::endl;
+
+
 
     return app.exec();
 }
