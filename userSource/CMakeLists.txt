@@ -89,6 +89,7 @@ qt5_import_plugins(${USER_EXE_NAME}
 
 # ( https://cmake.org/cmake/help/latest/command/target_compile_options.html#command:target_compile_options )
 # https://cmake.org/cmake/help/git-stage/command/target_link_options.html
+# needed to set RPATH
 target_link_options(${USER_EXE_NAME}
     PUBLIC "LINKER:--disable-new-dtags"
 )
@@ -244,7 +245,8 @@ configure_file(
 # https://cmake.org/cmake/help/latest/command/install.html#script
 install(
 	CODE [[ 
-		set(USER_TARGET_FILE "$<TARGET_FILE:insane>")
+        set(USER_TARGET_FILE "$<TARGET_FILE:insane>")
+        message(STATUS "USER_TARGET_FILE : <TARGET_FILE:insane> : $<TARGET_FILE:insane>")
 	]] 
 	SCRIPT
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/UserProjectInstallConfigure.cmake
