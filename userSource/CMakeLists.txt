@@ -12,7 +12,7 @@ project(
 )
 
 # https://doc.qt.io/qt-5/cmake-get-started.html
-set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
 
 # add the automatically determined parts of the RPATH
