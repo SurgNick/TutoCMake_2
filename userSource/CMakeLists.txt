@@ -173,7 +173,7 @@ foreach(QtNeededLib ${QtNeededLibs})
     get_target_property(QtFileSoname ${QtNeededLib} IMPORTED_SONAME_RELEASE)
     get_target_property(QtFileLocation ${QtNeededLib} LOCATION)
     get_filename_component(QtFileName ${QtFileLocation} NAME)
-    install_symlink(${CMAKE_INSTALL_PREFIX}/lib/${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
+    install_symlink(${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
 endforeach()
 
 
