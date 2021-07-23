@@ -141,6 +141,7 @@ install(FILES
 
 set(QtDeps)
 
+# libs to install
 set(QtNeededLibs
     Qt5::DBus
     Qt5::QmlModels
@@ -151,6 +152,7 @@ set(QtNeededLibs
     Qt5::XcbQpa
 )
 
+# for each lib to install, get its LOCATION and append it to QtDeps
 foreach(QtNeededLib ${QtNeededLibs})
     get_target_property(QtDepFile ${QtNeededLib} LOCATION)
     list(APPEND QtDeps "${QtDepFile}")
@@ -158,12 +160,14 @@ endforeach()
 
 # file(INSTALL ${QtDeps} DESTINATION "bin/lib" FOLLOW_SYMLINK_CHAIN)
 
+# install QtDeps
 message("QtDeps ${QtDeps}")
 install(FILES
     ${QtDeps}
     DESTINATION "lib"
 )
 
+# for each lib to install, create symlink and install it
 # https://cmake.org/cmake/help/latest/command/get_filename_component.html
 foreach(QtNeededLib ${QtNeededLibs})
     get_target_property(QtFileSoname ${QtNeededLib} IMPORTED_SONAME_RELEASE)
