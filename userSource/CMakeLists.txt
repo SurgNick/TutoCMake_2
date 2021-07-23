@@ -120,10 +120,14 @@ target_link_options(${USER_EXE_NAME}
 
 # https://stackoverflow.com/questions/35765106/symbolic-links-cmake/41037224
 macro(install_symlink filepath sympath)
-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})")
-    install(CODE "message(\"-- Created symlink: ${sympath} -> ${filepath}\")")
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${filepath} ${sympath})
+  message(\"-- Created symlink: ${sympath} -> ${filepath}\")")
 endmacro(install_symlink)
 
+macro(my_install_symlink filepath sympath)
+    install(CODE "file(CREATE_LINK \"${filepath}\" \"${sympath}\" SYMBOLIC)
+  message(\"-- Created symlink: ${sympath} -> ${filepath}\")")
+endmacro(my_install_symlink)
 
 set(QtDeps)
 
@@ -174,6 +178,7 @@ foreach(QtNeededLib ${QtNeededLibs})
     get_target_property(QtFileLocation ${QtNeededLib} LOCATION)
     get_filename_component(QtFileName ${QtFileLocation} NAME)
     install_symlink(${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
+    # my_install_symlink(${QtFileName} ${CMAKE_INSTALL_PREFIX}/lib/${QtFileSoname})
 endforeach()
 
 
