@@ -278,6 +278,14 @@ install(
 		${CMAKE_CURRENT_BINARY_DIR}/cmake/UserProjectInstallConfigure.cmake
 )
 
+# install(
+#     CODE "
+#         set(SURGAR_TARGET_FILE \"$<TARGET_FILE:${software_name}>\")
+#         message(\"SURGAR_TARGET_FILE : <TARGET_FILE:${software_name}> : $<TARGET_FILE:${software_name}>\")
+#     "
+#     SCRIPT
+#         ${CMAKE_CURRENT_BINARY_DIR}/cmake/surgarInstallConfigure.cmake
+# )
 
 set(CPACK_PACKAGE_DIRECTORY "CPack")
 
