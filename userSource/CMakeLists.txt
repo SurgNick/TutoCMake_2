@@ -43,7 +43,7 @@ set(USER_SHOW_DEPS "0" CACHE STRING "Display install dependencies info if set to
 # https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 find_package(TutoCMakeLib REQUIRED)
 
-find_package(Qt5 5.14 COMPONENTS Gui Qml Quick DBus QmlWorkerScript QuickControls2 QuickTemplates2 XcbQpa)
+find_package(Qt5 5.14 COMPONENTS Gui Qml Quick DBus QmlWorkerScript QuickControls2 QuickTemplates2 XcbQpa Svg)
 
 ###############################################################################
 ############################ IMPLEMENTATION/BUILD #############################
@@ -154,6 +154,7 @@ set(QtNeededLibs
     Qt5::QuickControls2
     Qt5::QuickTemplates2
     Qt5::XcbQpa
+    Qt5::Svg
 )
 
 # for each lib to install, get its LOCATION and append it to QtDeps
@@ -182,6 +183,23 @@ foreach(QtNeededLib ${QtNeededLibs})
 endforeach()
 
 
+macro(install_qt_plugin qtTargets destination)
+
+    set(deps)
+
+    foreach(target ${qtTargets})
+        get_target_property(targetFile ${target} LOCATION)
+        list(APPEND deps "${targetFile}")
+    endforeach()
+
+    install(FILES
+        ${deps}
+        DESTINATION "${destination}"
+    )
+
+endmacro(install_qt_plugin)
+
+
 ### xcbglintegrations ###
 
 set(QtNeededXcbLibs
@@ -189,17 +207,16 @@ set(QtNeededXcbLibs
     Qt5::QXcbGlxIntegrationPlugin
 )
 
-set(QtXcbDeps)
+install_qt_plugin("${QtNeededXcbLibs}" "bin/xcbglintegrations")
 
-foreach(QtNeededXcbLib ${QtNeededXcbLibs})
-    get_target_property(QtXcbDepFile ${QtNeededXcbLib} LOCATION)
-    list(APPEND QtXcbDeps "${QtXcbDepFile}")
-endforeach()
 
-install(FILES
-    ${QtXcbDeps}
-    DESTINATION "bin/xcbglintegrations"
+### Svg (PLUGIN_TYPE : imageformats) ###
+
+set(QtNeededSvgLibs
+    Qt5::QSvgPlugin
 )
+
+install_qt_plugin(${QtNeededSvgLibs} "plugins/imageformats")
 
 
 ### qml modules ###

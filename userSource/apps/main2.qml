@@ -14,7 +14,7 @@ ApplicationWindow {
 
     IconWidget {
         anchors.fill: parent
-        source: "qrc:///robin"
+        source: "qrc:///splash" //robin
         overlayColor: Qt.rgba(.5,.5,.5,.5)
     }
 }

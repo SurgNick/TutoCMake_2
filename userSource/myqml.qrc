@@ -9,4 +9,10 @@
         <file>apps/IconWidget.qml</file>
         <file alias="robin">robin.png</file>
     </qresource>
+
+    <qresource prefix="/">
+        <!-- image files -->
+        <file alias="splash">buildModel.svg</file>
+    </qresource>
+
 </RCC>

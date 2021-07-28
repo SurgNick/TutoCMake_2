@@ -39,7 +39,7 @@ Window {
         radius: 10
 
 
-        source: "qrc:///robin"
+        source: "qrc:///splash" //robin
         // overlayColor: "purple"
         onClicked: {
             console.log("ClickableImageWidget clicked")

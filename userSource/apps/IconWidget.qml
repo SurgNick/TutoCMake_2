@@ -12,7 +12,7 @@ Item {
     Image {
         id: image
         anchors.fill: parent
-        source: "qrc:///robin"
+        source: "qrc:///splash" // robin
         visible:false
     }
     ColorOverlay{
